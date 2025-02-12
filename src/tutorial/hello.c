@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <omp.h>
+#include "../common.h"
 
 int main() {
     #pragma omp parallel

@@ -1,8 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <omp.h>
+#include "../common.h"
 
+// sequential
 int sum(const int *arr, int size) {
     int result = 0;
 
@@ -13,6 +11,7 @@ int sum(const int *arr, int size) {
     return result;
 }
 
+// parallel
 int p1_sum(const int *arr, int size) {
     int result = 0;
     omp_set_num_threads(4);
@@ -33,6 +32,7 @@ int p1_sum(const int *arr, int size) {
     return result;
 }
 
+// parallel with reduction
 int p2_sum(const int *arr, int size) {
     int result = 0;
 

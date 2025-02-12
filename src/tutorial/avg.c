@@ -1,8 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <omp.h>
+#include "../common.h"
 
+// sequential
 double avg(const int *arr, int size) {
     double result = 0, inv_size = 1.0 / size;
 
@@ -13,6 +11,7 @@ double avg(const int *arr, int size) {
     return result;
 }
 
+// parallel
 double p1_avg(const int *arr, int size) {
     double result = 0, inv_size = 1.0 / size;
     omp_set_num_threads(4);
@@ -33,9 +32,10 @@ double p1_avg(const int *arr, int size) {
     return result;
 }
 
+// parallel with reduction
 double p2_avg(const int *arr, int size) {
     double result = 0, inv_size = 1.0 / size;
-
+    
     #pragma omp parallel for reduction(+ : result)
     for (int i = 0; i < size; i++) {
         result += arr[i] * inv_size;

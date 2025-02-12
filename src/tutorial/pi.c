@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <omp.h>
+#include "../common.h"
 
+// sequential
 double calculate_pi(int steps) {
     double sum = 0, step = 1.0 / steps;
 
@@ -13,6 +12,7 @@ double calculate_pi(int steps) {
     return step * sum;
 }
 
+// parallel
 double p1_calculate_pi(int steps) {
     double pi = 0, step = 1.0 / steps;
     omp_set_num_threads(4);
@@ -34,6 +34,7 @@ double p1_calculate_pi(int steps) {
     return pi;
 }
 
+// parallel with reduction
 double p2_calculate_pi(int steps) {
     double sum = 0, step = 1.0 / steps;
 
