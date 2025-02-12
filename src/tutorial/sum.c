@@ -1,48 +1,8 @@
 #include "../common.h"
 
-// sequential
-int sum(const int *arr, int size) {
-    int result = 0;
-
-    for (int i = 0; i < size; i++) {
-        result += arr[i];
-    }
-
-    return result;
-}
-
-// parallel
-int p1_sum(const int *arr, int size) {
-    int result = 0;
-    omp_set_num_threads(4);
-    
-    #pragma omp parallel
-    {
-        int partial_result = 0;
-
-        #pragma omp for
-        for (int i = 0; i < size; i++) {
-            partial_result += arr[i];
-        }
-
-        #pragma omp critical
-        result += partial_result;
-    }
-
-    return result;
-}
-
-// parallel with reduction
-int p2_sum(const int *arr, int size) {
-    int result = 0;
-
-    #pragma omp parallel for reduction(+ : result)
-    for (int i = 0; i < size; i++) {
-        result += arr[i];
-    }
-
-    return result;
-}
+int sum(const int *arr, int size); // sequential
+int p1_sum(const int *arr, int size); // parallel
+int p2_sum(const int *arr, int size); // parallel with reduction
 
 int main() {
     srand(time(NULL));
@@ -87,4 +47,48 @@ int main() {
     printf("took %lf seconds\n", delta / 1000);
 
     return 0;
+}
+
+// sequential
+int sum(const int *arr, int size) {
+    int result = 0;
+
+    for (int i = 0; i < size; i++) {
+        result += arr[i];
+    }
+
+    return result;
+}
+
+// parallel
+int p1_sum(const int *arr, int size) {
+    int result = 0;
+    omp_set_num_threads(4);
+    
+    #pragma omp parallel
+    {
+        int partial_result = 0;
+
+        #pragma omp for
+        for (int i = 0; i < size; i++) {
+            partial_result += arr[i];
+        }
+
+        #pragma omp critical
+        result += partial_result;
+    }
+
+    return result;
+}
+
+// parallel with reduction
+int p2_sum(const int *arr, int size) {
+    int result = 0;
+
+    #pragma omp parallel for reduction(+ : result)
+    for (int i = 0; i < size; i++) {
+        result += arr[i];
+    }
+
+    return result;
 }

@@ -1,48 +1,8 @@
 #include "../common.h"
 
-// sequential
-double avg(const int *arr, int size) {
-    double result = 0, inv_size = 1.0 / size;
-
-    for (int i = 0; i < size; i++) {
-        result += arr[i] * inv_size;
-    }
-
-    return result;
-}
-
-// parallel
-double p1_avg(const int *arr, int size) {
-    double result = 0, inv_size = 1.0 / size;
-    omp_set_num_threads(4);
-    
-    #pragma omp parallel
-    {
-        double partial_result = 0;
-
-        #pragma omp for
-        for (int i = 0; i < size; i++) {
-            partial_result += arr[i] * inv_size;
-        }
-
-        #pragma omp critical
-        result += partial_result;
-    }
-
-    return result;
-}
-
-// parallel with reduction
-double p2_avg(const int *arr, int size) {
-    double result = 0, inv_size = 1.0 / size;
-    
-    #pragma omp parallel for reduction(+ : result)
-    for (int i = 0; i < size; i++) {
-        result += arr[i] * inv_size;
-    }
-
-    return result;
-}
+double avg(const int *arr, int size); // sequential
+double p1_avg(const int *arr, int size); // parallel
+double p2_avg(const int *arr, int size); // parallel with reduction
 
 int main() {
     srand(time(NULL));
@@ -86,4 +46,47 @@ int main() {
     printf("took %lf seconds\n", delta / 1000);
 
     return 0;
+}
+
+double avg(const int *arr, int size) {
+    double result = 0, inv_size = 1.0 / size;
+
+    for (int i = 0; i < size; i++) {
+        result += arr[i] * inv_size;
+    }
+
+    return result;
+}
+
+// parallel
+double p1_avg(const int *arr, int size) {
+    double result = 0, inv_size = 1.0 / size;
+    omp_set_num_threads(4);
+    
+    #pragma omp parallel
+    {
+        double partial_result = 0;
+
+        #pragma omp for
+        for (int i = 0; i < size; i++) {
+            partial_result += arr[i] * inv_size;
+        }
+
+        #pragma omp critical
+        result += partial_result;
+    }
+
+    return result;
+}
+
+// parallel with reduction
+double p2_avg(const int *arr, int size) {
+    double result = 0, inv_size = 1.0 / size;
+    
+    #pragma omp parallel for reduction(+ : result)
+    for (int i = 0; i < size; i++) {
+        result += arr[i] * inv_size;
+    }
+
+    return result;
 }

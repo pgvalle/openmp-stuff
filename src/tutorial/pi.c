@@ -1,5 +1,46 @@
 #include "../common.h"
 
+
+double calculate_pi(int steps); // sequential
+double p1_calculate_pi(int steps); // parallel
+double p2_calculate_pi(int steps); // parallel with reduction
+
+int main() {
+    double start, delta, result;
+
+    // ===================================
+    printf("non-parallel\n");
+
+    start = omp_get_wtime();
+    result = calculate_pi(100000000);
+    delta = omp_get_wtime() - start;
+
+    printf("pi: %lf\n", result);
+    printf("took %lf seconds\n", delta / 1000);
+
+    // ===================================
+    printf("\nparallel v1\n");
+
+    start = omp_get_wtime();
+    result = p1_calculate_pi(100000000);
+    delta = omp_get_wtime() - start;
+
+    printf("pi: %lf\n", result);
+    printf("took %lf seconds\n", delta / 1000);
+
+    // ===================================
+    printf("\nparallel v2\n");
+
+    start = omp_get_wtime();
+    result = p1_calculate_pi(100000000);
+    delta = omp_get_wtime() - start;
+
+    printf("pi: %lf\n", result);
+    printf("took %lf seconds\n", delta / 1000); 
+
+    return 0;
+}
+
 // sequential
 double calculate_pi(int steps) {
     double sum = 0, step = 1.0 / steps;
@@ -45,40 +86,4 @@ double p2_calculate_pi(int steps) {
     }
 
     return step * sum;
-}
-
-int main() {
-    double start, delta, result;
-
-    // ===================================
-    printf("non-parallel\n");
-
-    start = omp_get_wtime();
-    result = calculate_pi(100000000);
-    delta = omp_get_wtime() - start;
-
-    printf("pi: %lf\n", result);
-    printf("took %lf seconds\n", delta / 1000);
-
-    // ===================================
-    printf("\nparallel v1\n");
-
-    start = omp_get_wtime();
-    result = p1_calculate_pi(100000000);
-    delta = omp_get_wtime() - start;
-
-    printf("pi: %lf\n", result);
-    printf("took %lf seconds\n", delta / 1000);
-
-    // ===================================
-    printf("\nparallel v2\n");
-
-    start = omp_get_wtime();
-    result = p1_calculate_pi(100000000);
-    delta = omp_get_wtime() - start;
-
-    printf("pi: %lf\n", result);
-    printf("took %lf seconds\n", delta / 1000); 
-
-    return 0;
 }
