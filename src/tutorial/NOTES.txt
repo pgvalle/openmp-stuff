@@ -1,0 +1,14 @@
+Reduction construct
+- Makes copies of a shared variable for each thread.
+- It seems that the shared variable can be used in the loop, but It's actually that thread's copy.
+- In the end, each thread contributes to calculating the shared variable by operating their copy of it with it. Openmp does that automatically.
+- An operator must be passed to the reduction construct so that openmp knows how to make the threads contribute to calculating the shared variable.
+
+Master construct
+- Only the master thread will do what is inside this construct's scope. There is an implicit barrier here.
+
+Single construct
+- Only one thread will do what is inside this construct's scope. Can be any thread. There is an implicit barrier here.
+
+Sections and section constructs
+- Each thread's work is going to be different.
